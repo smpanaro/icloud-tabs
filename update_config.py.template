@@ -1,0 +1,5 @@
+# You need to fill in these blanks.
+APNS_TOKEN = b"someBase64String" # Grab this from a request.
+DEVICE_NAME = "my computer" # Can be anything - only seems to be used for display.
+AUTHORIZATION = "X-MobileMe-AuthToken someBase64String" # Grab this from a request.
+DEVICE_UUID = "someDeviceSpecificUuid" # Can find this in ~/Library/SyncedPreferences/com.apple.Safari.plist

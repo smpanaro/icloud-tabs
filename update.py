@@ -62,7 +62,6 @@ def generate_plist(with_payload, tabs, registry_version="need-something-here"):
     out = StringIO.StringIO()
     biplist.writePlist(b, out)
     b_encoded = "".join(map(chr, [1, 0, 0, 0, 0,  0, 0, 23, 0, 0, 0, 0])) + out.getvalue()
-    print b_encoded
 
     p = {
           "apns-token": plistlib.Data(APNS_TOKEN),
@@ -84,7 +83,6 @@ def generate_plist(with_payload, tabs, registry_version="need-something-here"):
 
     if with_payload == False:
       p["apps"][0].pop("keys")
-    print p
 
     # Write p into a regular plist and return its string value.
     out = StringIO.StringIO()
@@ -131,7 +129,6 @@ def make_request(body):
   u = urllib2.urlopen(request)
   data = u.read()
 
-  print "Response code:",u.getcode()
   return ungzip(data)
 
 
@@ -152,7 +149,6 @@ if __name__ == '__main__':
   response = make_request(payload_plist)
   response_plist = plistlib.readPlistFromString(response)
 
-  print response_plist
   registry_version = response_plist["apps"][0]["registry-version"]
 
   # Next use that string to make a request with a payload of tabs.

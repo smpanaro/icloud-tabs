@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+
+  "name": "iCloud Tabs",
+  "description": "Send current tabs to iCloud.",
+  "version": "0.1",
+
+  "permissions": [
+    "tabs",
+    "http://*/*"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+    // "persistent": true
+  }
+}

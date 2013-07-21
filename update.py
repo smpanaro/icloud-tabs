@@ -61,6 +61,7 @@ def generate_plist(with_payload, tabs, registry_version="need-something-here"):
     # Write b into a binary plist and base64 encode it.
     out = StringIO.StringIO()
     biplist.writePlist(b, out)
+    # There is a required 12 byte header here. Don't know what it's supposed to contain.
     b_encoded = "".join(map(chr, [1, 0, 0, 0, 0,  0, 0, 23, 0, 0, 0, 0])) + out.getvalue()
 
     p = {
@@ -131,6 +132,17 @@ def make_request(body):
 
   return ungzip(data)
 
+def update_tabs(tabs):
+  # First make an empty (without tab data) request to get the latest registry string.
+  payload_plist = generate_plist(False, [])
+  response = make_request(payload_plist)
+  response_plist = plistlib.readPlistFromString(response)
+
+  registry_version = response_plist["apps"][0]["registry-version"]
+
+  # Next use that string to make a request with a payload of tabs.
+  payload_plist = generate_plist(True, tabs, registry_version=registry_version)
+  make_request(payload_plist)
 
 if __name__ == '__main__':
   TABS = [
@@ -144,13 +156,4 @@ if __name__ == '__main__':
           }
         ]
 
-  # First make an empty (without tab data) request to get the latest registry string.
-  payload_plist = generate_plist(False, [])
-  response = make_request(payload_plist)
-  response_plist = plistlib.readPlistFromString(response)
-
-  registry_version = response_plist["apps"][0]["registry-version"]
-
-  # Next use that string to make a request with a payload of tabs.
-  payload_plist = generate_plist(True, TABS, registry_version=registry_version)
-  make_request(payload_plist)
+  updateTabs(TABS)
